@@ -1,0 +1,9 @@
+FROM weknora-app-builder:memory-insights-20261012 AS verify
+COPY . .
+RUN --mount=type=cache,target=/go/pkg/mod go test ./internal/types ./internal/application/service/memory ./internal/qainsights ./internal/im ./internal/im/wecom -count=1
+RUN --mount=type=cache,target=/go/pkg/mod go test ./internal/middleware -run 'MemoryBodies' -count=1
+RUN --mount=type=cache,target=/go/pkg/mod go test ./internal/handler ./internal/router ./internal/application/service/chat_pipeline ./internal/handler/session -run 'Memory|Replay|KnowledgePreview|KnowledgeEvolution|QAInsights|FeedbackAdmin' -count=1
+FROM verify AS builder
+RUN --mount=type=cache,target=/go/pkg/mod make build-prod
+FROM scratch AS artifact
+COPY --from=builder /app/WeKnora /WeKnora

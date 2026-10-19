@@ -1,0 +1,3 @@
+FROM weknora-app:feedback-layout-20261010
+COPY --chown=appuser:appuser WeKnora /app/WeKnora
+COPY --chown=appuser:appuser migrations /app/migrations

@@ -1,0 +1,21 @@
+services:
+  ollama:
+    image: ollama/ollama:latest
+    restart: unless-stopped
+    volumes:
+      - ollama_models:/root/.ollama
+    networks:
+      - WeKnora-network
+
+  app:
+    image: weknora-app:feedback-workbench-20261010
+    pull_policy: never
+    environment:
+      OLLAMA_BASE_URL: http://ollama:11434
+
+  frontend:
+    image: weknora-ui:feedback-workbench-20261010
+    pull_policy: never
+
+volumes:
+  ollama_models:

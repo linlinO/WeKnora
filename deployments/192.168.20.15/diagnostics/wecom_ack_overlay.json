@@ -1,0 +1,5 @@
+{
+  "Replace": {
+    "C:/Users/QT-20210643/Documents/ChatGPT/CC/WeKnora/internal/im/wecom/ack_diagnostic_test.go": "C:/Users/QT-20210643/Documents/ChatGPT/CC/WeKnora/deployments/192.168.20.15/diagnostics/wecom_ack_probe_test.go"
+  }
+}

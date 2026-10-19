@@ -1,0 +1,10 @@
+ARG BUILDER_IMAGE=weknora-app-builder:feedback-names-20260923
+ARG RUNTIME_IMAGE=weknora-app:evolution-20261010
+FROM ${BUILDER_IMAGE} AS builder
+COPY . .
+RUN --mount=type=cache,target=/go/pkg/mod go test ./internal/handler ./internal/router -run 'AnswerFeedback|KnowledgeEvolution|FeedbackAdmin' -count=1
+RUN --mount=type=cache,target=/go/pkg/mod go test ./internal/feedback ./internal/evolution ./internal/im ./internal/im/wecom -count=1
+RUN --mount=type=cache,target=/go/pkg/mod make build-prod
+FROM ${RUNTIME_IMAGE}
+COPY --from=builder --chown=appuser:appuser /app/WeKnora /app/WeKnora
+COPY --chown=appuser:appuser migrations /app/migrations

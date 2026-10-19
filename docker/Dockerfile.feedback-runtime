@@ -1,0 +1,9 @@
+# Reuse the deployed optional runtime tools; rebuild only the application.
+# Both inputs are local, explicitly versioned images prepared before deployment.
+ARG BUILDER_IMAGE=weknora-app-builder:feedback-v2
+ARG RUNTIME_IMAGE=weknora-app:before-feedback-20260923
+FROM ${BUILDER_IMAGE} AS application
+RUN --mount=type=cache,target=/go/pkg/mod go test ./internal/feedback ./internal/im ./internal/im/wecom ./internal/handler -run 'Feedback' -count=1
+FROM ${RUNTIME_IMAGE}
+COPY --from=application --chown=appuser:appuser /app/WeKnora /app/WeKnora
+COPY --chown=appuser:appuser migrations /app/migrations

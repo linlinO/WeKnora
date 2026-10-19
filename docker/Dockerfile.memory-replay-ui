@@ -1,0 +1,2 @@
+FROM weknora-ui:list-style-20261012
+COPY dist/ /usr/share/nginx/html/

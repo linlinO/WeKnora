@@ -1,0 +1,3 @@
+FROM weknora-app:memory-insights-20261012
+COPY --chown=appuser:appuser WeKnora /app/WeKnora
+COPY --chown=appuser:appuser migrations /app/migrations

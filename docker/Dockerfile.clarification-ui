@@ -1,0 +1,2 @@
+FROM weknora-ui:memory-replay-20261013
+COPY dist/ /usr/share/nginx/html/

@@ -1,0 +1,4 @@
+# Overlay the freshly built frontend assets on the already validated nginx image.
+# This keeps the target host independent of the public npm registry during deploy.
+FROM wechatopenai/weknora-ui:latest
+COPY dist/ /usr/share/nginx/html/

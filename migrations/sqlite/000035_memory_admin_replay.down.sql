@@ -1,0 +1,15 @@
+DROP INDEX IF EXISTS idx_replay_running;
+ALTER TABLE knowledge_regression_results DROP COLUMN evaluation;
+ALTER TABLE knowledge_regression_results DROP COLUMN duration_ms;
+ALTER TABLE knowledge_regression_results DROP COLUMN "references";
+ALTER TABLE knowledge_regression_results DROP COLUMN expected_answer;
+ALTER TABLE knowledge_regression_results DROP COLUMN question;
+ALTER TABLE knowledge_regression_runs DROP COLUMN input;
+ALTER TABLE knowledge_regression_runs DROP COLUMN config_hash;
+ALTER TABLE knowledge_regression_runs DROP COLUMN model_id;
+ALTER TABLE knowledge_regression_runs DROP COLUMN agent_id;
+ALTER TABLE knowledge_regression_runs DROP COLUMN candidate_hash;
+ALTER TABLE knowledge_regression_runs DROP COLUMN kind;
+DROP TABLE memory_admin_grants;
+ALTER TABLE qa_answers DROP COLUMN memory_diagnostic;
+ALTER TABLE messages DROP COLUMN memory_diagnostic;

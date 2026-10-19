@@ -1,0 +1,15 @@
+ARG BUILDER_IMAGE=weknora-app-builder:memory-insights-20261012
+ARG RUNTIME_IMAGE=weknora-app:feedback-layout-20261010
+FROM ${BUILDER_IMAGE} AS verify
+COPY . .
+RUN --mount=type=cache,target=/go/pkg/mod go test ./internal/qainsights ./internal/types ./internal/application/service/memory ./internal/im ./internal/im/wecom ./internal/handler/session -count=1
+RUN --mount=type=cache,target=/go/pkg/mod go test ./internal/handler ./internal/router ./internal/application/repository -run 'QAInsights|AnswerFeedback|KnowledgeEvolution|FeedbackAdmin|Memory' -count=1
+FROM verify AS builder
+RUN --mount=type=cache,target=/go/pkg/mod make build-prod
+
+FROM scratch AS artifact
+COPY --from=builder /app/WeKnora /WeKnora
+
+FROM ${RUNTIME_IMAGE}
+COPY --from=builder --chown=appuser:appuser /app/WeKnora /app/WeKnora
+COPY --chown=appuser:appuser migrations /app/migrations

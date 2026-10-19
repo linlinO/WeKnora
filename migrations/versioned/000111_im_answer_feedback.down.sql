@@ -1,0 +1,10 @@
+DROP TABLE IF EXISTS im_feedback_targets;
+UPDATE answer_feedback SET status = 'ignored', rating = 'not_useful' WHERE status = 'withdrawn';
+ALTER TABLE answer_feedback DROP CONSTRAINT IF EXISTS answer_feedback_rating_check;
+ALTER TABLE answer_feedback DROP CONSTRAINT IF EXISTS answer_feedback_status_check;
+ALTER TABLE answer_feedback ADD CONSTRAINT answer_feedback_rating_check CHECK (rating IN ('useful', 'not_useful'));
+ALTER TABLE answer_feedback ADD CONSTRAINT answer_feedback_status_check CHECK (status IN ('pending', 'resolved', 'ignored'));
+ALTER TABLE answer_feedback DROP COLUMN IF EXISTS source;
+ALTER TABLE answer_feedback DROP COLUMN IF EXISTS channel_id;
+ALTER TABLE answer_feedback DROP COLUMN IF EXISTS last_event_id;
+ALTER TABLE answer_feedback DROP COLUMN IF EXISTS last_event_at;

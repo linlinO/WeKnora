@@ -1,0 +1,16 @@
+ALTER TABLE messages ADD COLUMN memory_diagnostic TEXT;
+ALTER TABLE qa_answers ADD COLUMN memory_diagnostic TEXT;
+CREATE TABLE memory_admin_grants (tenant_id INTEGER NOT NULL, user_id TEXT NOT NULL, granted_by TEXT NOT NULL, PRIMARY KEY(tenant_id,user_id));
+ALTER TABLE knowledge_regression_runs ADD COLUMN kind TEXT NOT NULL DEFAULT 'legacy_text';
+ALTER TABLE knowledge_regression_runs ADD COLUMN candidate_hash TEXT NOT NULL DEFAULT '';
+ALTER TABLE knowledge_regression_runs ADD COLUMN agent_id TEXT NOT NULL DEFAULT '';
+ALTER TABLE knowledge_regression_runs ADD COLUMN model_id TEXT NOT NULL DEFAULT '';
+ALTER TABLE knowledge_regression_runs ADD COLUMN config_hash TEXT NOT NULL DEFAULT '';
+ALTER TABLE knowledge_regression_runs ADD COLUMN input TEXT;
+ALTER TABLE knowledge_regression_results ADD COLUMN question TEXT NOT NULL DEFAULT '';
+ALTER TABLE knowledge_regression_results ADD COLUMN expected_answer TEXT NOT NULL DEFAULT '';
+ALTER TABLE knowledge_regression_results ADD COLUMN "references" TEXT;
+ALTER TABLE knowledge_regression_results ADD COLUMN duration_ms INTEGER NOT NULL DEFAULT 0;
+ALTER TABLE knowledge_regression_results ADD COLUMN evaluation TEXT NOT NULL DEFAULT '';
+UPDATE knowledge_regression_runs SET status='failed',failure_summary='旧版未完成测试，请重新运行',completed_at=CURRENT_TIMESTAMP WHERE status='pending';
+CREATE UNIQUE INDEX idx_replay_running ON knowledge_regression_runs(tenant_id,proposal_id) WHERE status='pending';
